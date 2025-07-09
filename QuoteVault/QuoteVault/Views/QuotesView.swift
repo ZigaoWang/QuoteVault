@@ -34,13 +34,10 @@ struct QuotesView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                // Background with subtle texture
                 Color(red: 0.98, green: 0.97, blue: 0.95)
                     .ignoresSafeArea()
                 
-                // Content
                 VStack {
-                    // Search bar
                     HStack {
                         Image(systemName: "magnifyingglass")
                             .foregroundColor(.gray)
@@ -57,7 +54,6 @@ struct QuotesView: View {
                     .padding(.horizontal)
                     .padding(.top, 8)
                     
-                    // Favorites toggle
                     Toggle(isOn: $showingFavoritesOnly) {
                         Label("Favorites Only", systemImage: "heart.fill")
                             .font(.system(size: 16, design: .serif))
@@ -97,7 +93,8 @@ struct QuotesView: View {
                     }
                 }
             }
-            .navigationTitle("Your Quotes")
+            .navigationTitle("Quotes")
+            .navigationBarTitleDisplayMode(.large)
         }
     }
 } 

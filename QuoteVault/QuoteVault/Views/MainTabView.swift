@@ -7,7 +7,7 @@ struct MainTabView: View {
         TabView {
             BooksView()
                 .tabItem {
-                    Label("Books", systemImage: "book")
+                    Label("Library", systemImage: "book")
                 }
             
             QuotesView()
@@ -21,6 +21,6 @@ struct MainTabView: View {
                 }
         }
         .environmentObject(dataManager)
-        .tint(Color(red: 0.4, green: 0.2, blue: 0.1)) // Warm brown color for a book-like feel
+        .tint(Color(red: 0.4, green: 0.2, blue: 0.1))
     }
 } 

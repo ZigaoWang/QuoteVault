@@ -9,17 +9,14 @@ struct DailyQuoteView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                // Background with subtle texture
                 Color(red: 0.98, green: 0.97, blue: 0.95)
                     .ignoresSafeArea()
                 
-                // Content
                 if let quote = dailyQuote, let book = book {
                     ScrollView {
                         VStack(spacing: 30) {
                             Spacer(minLength: 40)
                             
-                            // Quote content with decorative elements
                             VStack(spacing: 20) {
                                 Image(systemName: "quote.opening")
                                     .font(.system(size: 40))
@@ -44,7 +41,6 @@ struct DailyQuoteView: View {
                             )
                             .padding(.horizontal, 20)
                             
-                            // Book info
                             VStack(spacing: 4) {
                                 Text(book.title)
                                     .font(.system(size: 20, weight: .medium, design: .serif))
@@ -63,11 +59,9 @@ struct DailyQuoteView: View {
                             }
                             .padding()
                             
-                            // Action buttons
                             HStack(spacing: 30) {
                                 Button {
                                     dataManager.toggleFavorite(for: quote.id)
-                                    // Refresh the daily quote to reflect the favorite status change
                                     if let id = dailyQuote?.id,
                                        let index = dataManager.quotes.firstIndex(where: { $0.id == id }) {
                                         dailyQuote = dataManager.quotes[index]
@@ -145,7 +139,8 @@ struct DailyQuoteView: View {
                     }
                 }
             }
-            .navigationTitle("Daily Quote")
+            .navigationTitle("Daily")
+            .navigationBarTitleDisplayMode(.large)
             .onAppear {
                 selectRandomQuote()
             }
@@ -159,7 +154,6 @@ struct DailyQuoteView: View {
             return
         }
         
-        // Prefer favorite quotes if available
         let favoriteQuotes = dataManager.quotes.filter { $0.isFavorite }
         let quotesToChooseFrom = favoriteQuotes.isEmpty ? dataManager.quotes : favoriteQuotes
         
@@ -170,7 +164,6 @@ struct DailyQuoteView: View {
     }
 }
 
-// Helper view for sharing
 struct ShareSheet: UIViewControllerRepresentable {
     let activityItems: [Any]
     
