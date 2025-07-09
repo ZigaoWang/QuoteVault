@@ -7,9 +7,9 @@ struct AddQuoteView: View {
     let book: Book
     
     @State private var quoteContent = ""
+    @State private var notes: String = ""
     @State private var page: String = ""
     @State private var chapter: String = ""
-    @State private var notes: String = ""
     
     var body: some View {
         NavigationStack {
@@ -20,6 +20,19 @@ struct AddQuoteView: View {
                         .frame(minHeight: 150)
                 }
                 
+                Section("Your Notes (Optional)") {
+                    TextEditor(text: $notes)
+                        .font(.system(size: 16, design: .serif))
+                        .frame(minHeight: 80)
+                        .placeholder(when: notes.isEmpty) {
+                            Text("Add your thoughts about this quote...")
+                                .font(.system(size: 16, design: .serif))
+                                .foregroundColor(.gray.opacity(0.5))
+                                .padding(.top, 8)
+                                .padding(.leading, 4)
+                        }
+                }
+                
                 Section("Details") {
                     TextField("Page (optional)", text: $page)
                         .font(.system(size: 16, design: .serif))
@@ -28,13 +41,6 @@ struct AddQuoteView: View {
                     TextField("Chapter (optional)", text: $chapter)
                         .font(.system(size: 16, design: .serif))
                 }
-                
-                Section("Notes") {
-                    TextEditor(text: $notes)
-                        .font(.system(size: 16, design: .serif))
-                        .frame(minHeight: 80)
-                }
-                .headerProminence(.increased)
                 
                 Section("From") {
                     HStack {
@@ -68,6 +74,11 @@ struct AddQuoteView: View {
                 }
             }
         }
+        .onAppear {
+            UINavigationBar.appearance().titleTextAttributes = [
+                .font: UIFont(name: "Georgia", size: 17)!
+            ]
+        }
     }
     
     private func saveQuote() {
@@ -83,5 +94,19 @@ struct AddQuoteView: View {
         
         dataManager.addQuote(quote)
         dismiss()
+    }
+}
+
+// Placeholder modifier
+extension View {
+    func placeholder<Content: View>(
+        when shouldShow: Bool,
+        alignment: Alignment = .leading,
+        @ViewBuilder placeholder: () -> Content) -> some View {
+        
+        ZStack(alignment: alignment) {
+            placeholder().opacity(shouldShow ? 1 : 0)
+            self
+        }
     }
 } 
