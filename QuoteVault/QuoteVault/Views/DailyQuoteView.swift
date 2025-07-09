@@ -112,11 +112,13 @@ struct DailyQuoteView: View {
                         }
                         .padding(.bottom, 40)
                     }
+                    .scrollContentBackground(.hidden)
                     .sheet(isPresented: $showingShare) {
+                        let pageText = quote.page != nil ? " (Page \(quote.page!))" : ""
                         let textToShare = """
                         "\(quote.content)"
                         
-                        — \(book.author), \(book.title)
+                        — \(book.author), \(book.title)\(pageText)
                         """
                         
                         ShareSheet(activityItems: [textToShare])
@@ -141,6 +143,8 @@ struct DailyQuoteView: View {
             }
             .navigationTitle("Daily")
             .navigationBarTitleDisplayMode(.large)
+            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .onAppear {
                 selectRandomQuote()
             }

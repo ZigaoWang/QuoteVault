@@ -90,11 +90,14 @@ struct QuotesView: View {
                             }
                             .padding(.vertical)
                         }
+                        .scrollContentBackground(.hidden)
                     }
                 }
             }
             .navigationTitle("Quotes")
             .navigationBarTitleDisplayMode(.large)
+            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
         }
     }
 } 

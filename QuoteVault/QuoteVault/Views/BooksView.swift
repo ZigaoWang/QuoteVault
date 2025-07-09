@@ -3,6 +3,7 @@ import SwiftUI
 struct BooksView: View {
     @EnvironmentObject private var dataManager: DataManager
     @State private var showingAddBook = false
+    @State private var showingAddQuote = false
     @State private var searchText = ""
     @State private var selectedBook: Book?
     
@@ -65,6 +66,7 @@ struct BooksView: View {
                     }
                     .padding(.top, 20)
                 }
+                .scrollContentBackground(.hidden)
                 .searchable(text: $searchText, prompt: "Search your library")
                 
                 if filteredBooks.isEmpty && !searchText.isEmpty {
@@ -75,6 +77,8 @@ struct BooksView: View {
             }
             .navigationTitle("QuoteVault")
             .navigationBarTitleDisplayMode(.large)
+            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
@@ -88,6 +92,11 @@ struct BooksView: View {
             .sheet(isPresented: $showingAddBook) {
                 AddBookView()
             }
+            .sheet(isPresented: $showingAddQuote) {
+                if let book = lastReadBook {
+                    AddQuoteView(book: book)
+                }
+            }
             .navigationDestination(item: $selectedBook) { book in
                 BookDetailView(book: book)
             }
@@ -100,21 +109,21 @@ struct BooksView: View {
                 title: "Books",
                 value: "\(dataManager.books.count)",
                 icon: "books.vertical",
-                color: .blue
+                color: .brown.opacity(0.7)
             )
             
             StatCard(
                 title: "Quotes",
                 value: "\(totalQuotes)",
                 icon: "text.quote",
-                color: .green
+                color: .brown.opacity(0.6)
             )
             
             StatCard(
                 title: "Favorites",
                 value: "\(favoriteQuotes)",
                 icon: "heart.fill",
-                color: .red
+                color: .brown.opacity(0.8)
             )
         }
         .padding(.horizontal, 20)
@@ -172,7 +181,7 @@ struct BooksView: View {
                     
                     VStack(spacing: 8) {
                         Button {
-                            selectedBook = book
+                            showingAddQuote = true
                         } label: {
                             Text("Add Quote")
                                 .font(.system(size: 14, weight: .medium, design: .serif))

@@ -9,6 +9,7 @@ struct AddQuoteView: View {
     @State private var quoteContent = ""
     @State private var page: String = ""
     @State private var chapter: String = ""
+    @State private var notes: String = ""
     
     var body: some View {
         NavigationStack {
@@ -28,6 +29,13 @@ struct AddQuoteView: View {
                         .font(.system(size: 16, design: .serif))
                 }
                 
+                Section("Notes") {
+                    TextEditor(text: $notes)
+                        .font(.system(size: 16, design: .serif))
+                        .frame(minHeight: 80)
+                }
+                .headerProminence(.increased)
+                
                 Section("From") {
                     HStack {
                         Text(book.title)
@@ -43,6 +51,8 @@ struct AddQuoteView: View {
             }
             .navigationTitle("Add Quote")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
@@ -67,7 +77,8 @@ struct AddQuoteView: View {
             content: quoteContent.trimmingCharacters(in: .whitespacesAndNewlines),
             bookID: book.id,
             page: pageNumber,
-            chapter: chapter.isEmpty ? nil : chapter
+            chapter: chapter.isEmpty ? nil : chapter,
+            notes: notes.isEmpty ? nil : notes.trimmingCharacters(in: .whitespacesAndNewlines)
         )
         
         dataManager.addQuote(quote)

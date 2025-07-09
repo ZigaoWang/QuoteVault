@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct QuoteVaultApp: App {
+    @StateObject private var dataManager = DataManager()
+    
     var body: some Scene {
         WindowGroup {
             MainTabView()
+                .environmentObject(dataManager)
         }
     }
 }

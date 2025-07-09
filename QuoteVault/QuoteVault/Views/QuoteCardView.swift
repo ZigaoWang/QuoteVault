@@ -4,6 +4,7 @@ struct QuoteCardView: View {
     let quote: Quote
     let book: Book?
     var onFavoriteToggle: () -> Void
+    @State private var showingShare = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -16,10 +17,19 @@ struct QuoteCardView: View {
                 .lineSpacing(8)
                 .padding(.horizontal, 8)
             
+            // Notes if available
+            if let notes = quote.notes {
+                Text(notes)
+                    .font(.system(size: 14, design: .serif))
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal, 8)
+                    .italic()
+            }
+            
             Divider()
                 .padding(.horizontal)
             
-            // Book info and favorite button
+            // Book info and action buttons
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(book?.title ?? "Unknown Book")
@@ -43,10 +53,20 @@ struct QuoteCardView: View {
                 
                 Spacer()
                 
-                Button(action: onFavoriteToggle) {
-                    Image(systemName: quote.isFavorite ? "heart.fill" : "heart")
-                        .foregroundColor(quote.isFavorite ? .red : .gray)
-                        .font(.system(size: 18))
+                HStack(spacing: 16) {
+                    Button(action: onFavoriteToggle) {
+                        Image(systemName: quote.isFavorite ? "heart.fill" : "heart")
+                            .foregroundColor(quote.isFavorite ? .red : .gray)
+                            .font(.system(size: 18))
+                    }
+                    
+                    Button {
+                        showingShare = true
+                    } label: {
+                        Image(systemName: "square.and.arrow.up")
+                            .foregroundColor(.blue)
+                            .font(.system(size: 18))
+                    }
                 }
             }
             .padding(.horizontal)
@@ -62,5 +82,17 @@ struct QuoteCardView: View {
                 .stroke(Color.gray.opacity(0.2), lineWidth: 1)
         )
         .padding(.horizontal)
+        .sheet(isPresented: $showingShare) {
+            if let book = book {
+                let pageText = quote.page != nil ? " (Page \(quote.page!))" : ""
+                let textToShare = """
+                "\(quote.content)"
+                
+                — \(book.author), \(book.title)\(pageText)
+                """
+                
+                ShareSheet(activityItems: [textToShare])
+            }
+        }
     }
 } 

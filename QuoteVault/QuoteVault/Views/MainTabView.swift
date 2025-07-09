@@ -1,26 +1,31 @@
 import SwiftUI
 
 struct MainTabView: View {
-    @StateObject private var dataManager = DataManager()
-    
     var body: some View {
         TabView {
             BooksView()
                 .tabItem {
-                    Label("Library", systemImage: "book")
+                    Image(systemName: "books.vertical")
+                    Text("Library")
+                        .font(.system(size: 10, design: .serif))
                 }
             
             QuotesView()
                 .tabItem {
-                    Label("Quotes", systemImage: "text.quote")
+                    Image(systemName: "text.quote")
+                    Text("Quotes")
+                        .font(.system(size: 10, design: .serif))
                 }
             
             DailyQuoteView()
                 .tabItem {
-                    Label("Daily", systemImage: "sparkles")
+                    Image(systemName: "sun.max")
+                    Text("Daily")
+                        .font(.system(size: 10, design: .serif))
                 }
         }
-        .environmentObject(dataManager)
-        .tint(Color(red: 0.4, green: 0.2, blue: 0.1))
+        .accentColor(.brown.opacity(0.8))
+        .toolbarBackground(.ultraThinMaterial, for: .tabBar)
+        .toolbarBackground(.visible, for: .tabBar)
     }
 } 
